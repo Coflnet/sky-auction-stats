@@ -40,7 +40,7 @@ func (e *InvalidDurationError) Error() string {
 
 func DurationValid(duration time.Duration) bool {
 
-	if duration.Hours() < 24*30*12 {
+	if duration.Hours() > 24*30*12 {
 		log.Warn().Msgf("more than 1 year is not supported")
 		return false
 	}
