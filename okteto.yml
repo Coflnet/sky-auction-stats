@@ -1,0 +1,23 @@
+name: auction-stats
+autocreate: true
+image: golang:1.18.3-bullseye
+command: bash
+securityContext:
+  capabilities:
+    add:
+    - SYS_PTRACE
+volumes:
+- /go/pkg/
+- /root/.cache/go-build/
+sync:
+- .:/usr/src/app
+workdir: /usr/src/app
+environment:
+- KAFKA_HOST=kafka.kafka:9092
+- KAFKA_CONSUMER_GROUP=auction-stats-cg
+- SLOWDOWN_MS=10
+- REDIS_URL=redis://redis.redis:6379
+- TOPIC_NEW_AUCTION=sky-newauction
+- TOPIC_NEW_FLIP=sky-newflip
+forward:
+- 8080:8080

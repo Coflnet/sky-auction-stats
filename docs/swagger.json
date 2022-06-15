@@ -1,0 +1,44 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API for Auction Stats Service",
+        "title": "Auction Stats API",
+        "contact": {
+            "name": "Flou21",
+            "email": "muehlhans.f@coflnet.com"
+        },
+        "license": {
+            "name": "AGPL v3"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api/",
+    "paths": {
+        "/new-auctions": {
+            "get": {
+                "description": "returns the amount of auctions within in the last x minutes",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Stats"
+                ],
+                "summary": "Get recent auctions",
+                "parameters": [
+                    {
+                        "maximum": 2880,
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "duration in minutes",
+                        "name": "duration",
+                        "in": "query"
+                    }
+                ]
+            }
+        }
+    }
+}

@@ -1,0 +1,30 @@
+basePath: /api/
+host: localhost:8080
+info:
+  contact:
+    email: muehlhans.f@coflnet.com
+    name: Flou21
+  description: API for Auction Stats Service
+  license:
+    name: AGPL v3
+  title: Auction Stats API
+  version: "1.0"
+paths:
+  /new-auctions:
+    get:
+      consumes:
+      - application/json
+      description: returns the amount of auctions within in the last x minutes
+      parameters:
+      - description: duration in minutes
+        in: query
+        maximum: 2880
+        minimum: 1
+        name: duration
+        type: integer
+      produces:
+      - application/json
+      summary: Get recent auctions
+      tags:
+      - Stats
+swagger: "2.0"
