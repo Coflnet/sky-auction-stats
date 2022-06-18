@@ -149,13 +149,11 @@ func newStateOfNotifier(notifier *model.Notifier, alertTriggered bool) (bool, st
 			return true, model.NotifierStatePending, nil
 		}
 
-		log.Info().Msgf("notifier %v stays ok", notifier.ID)
 		return false, model.NotifierStateOK, nil
 	}
 
 	if lastState.State == model.NotifierStateAlerting {
 		if alertTriggered {
-			log.Info().Msgf("notifier %v is already alerting", notifier.ID)
 			return false, model.NotifierStateAlerting, nil
 		}
 
@@ -175,7 +173,6 @@ func newStateOfNotifier(notifier *model.Notifier, alertTriggered bool) (bool, st
 			return true, model.NotifierStateAlerting, nil
 		}
 
-		log.Info().Msgf("notifier %v is still pending, %v", notifier.ID, pendingDuration)
 		return false, model.NotifierStatePending, nil
 	}
 
