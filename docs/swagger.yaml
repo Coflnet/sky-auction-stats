@@ -1,4 +1,57 @@
 basePath: /api/
+definitions:
+  model.Notifier:
+    properties:
+      active:
+        type: boolean
+      alertText:
+        type: string
+      description:
+        type: string
+      evaluationInterval:
+        type: integer
+      id:
+        type: string
+      lastEvaluation:
+        type: string
+      name:
+        type: string
+      nextEvaluation:
+        type: string
+      notifierStates:
+        items:
+          $ref: '#/definitions/model.NotifierState'
+        type: array
+      notifierTemplates:
+        items:
+          $ref: '#/definitions/model.NotifierTemplate'
+        type: array
+      templateOperator:
+        type: string
+      timeUntilTrigger:
+        description: TimeUntilTrigger like the grafana pending state time
+        type: integer
+      userId:
+        type: integer
+    type: object
+  model.NotifierState:
+    properties:
+      state:
+        type: string
+      timestamp:
+        type: string
+    type: object
+  model.NotifierTemplate:
+    properties:
+      durationToCheck:
+        type: integer
+      key:
+        type: string
+      operator:
+        type: string
+      value:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact:
@@ -27,4 +80,66 @@ paths:
       summary: Get recent auctions
       tags:
       - Stats
+  /notifier:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Notifier
+        in: body
+        name: notifier
+        required: true
+        schema:
+          $ref: '#/definitions/model.Notifier'
+      produces:
+      - application/json
+      summary: deletes a notifier with a specifc ID
+      tags:
+      - notifiers
+    post:
+      consumes:
+      - application/json
+      description: states, next / last evaluation will be ignored
+      parameters:
+      - description: Notifier
+        in: body
+        name: notifier
+        required: true
+        schema:
+          $ref: '#/definitions/model.Notifier'
+      produces:
+      - application/json
+      summary: creates a notifier
+      tags:
+      - notifiers
+    put:
+      consumes:
+      - application/json
+      description: states, next / last evaluation will be ignored, replaces the notifier
+        with the same ID
+      parameters:
+      - description: Notifier
+        in: body
+        name: notifier
+        required: true
+        schema:
+          $ref: '#/definitions/model.Notifier'
+      produces:
+      - application/json
+      summary: updates a notifier
+      tags:
+      - notifiers
+  /notifier/{userId}:
+    get:
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      summary: lists the notifiers of a user
+      tags:
+      - notifiers
 swagger: "2.0"

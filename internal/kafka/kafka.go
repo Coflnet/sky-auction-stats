@@ -24,12 +24,11 @@ func Init() error {
 	}
 
 	auctionReader = kafkago.NewReader(kafkago.ReaderConfig{
-		Brokers:   []string{os.Getenv("KAFKA_HOST")},
-		GroupID:   os.Getenv("KAFKA_CONSUMER_GROUP"),
-		Topic:     auctionTopic,
-		Partition: 0,
-		MaxBytes:  10e6,
-		MinBytes:  10e3,
+		Brokers:  []string{os.Getenv("KAFKA_HOST")},
+		GroupID:  os.Getenv("KAFKA_CONSUMER_GROUP"),
+		Topic:    auctionTopic,
+		MaxBytes: 10e6,
+		MinBytes: 10e3,
 	})
 
 	go func() {

@@ -53,6 +53,180 @@ var doc = `{
                     }
                 ]
             }
+        },
+        "/notifier": {
+            "put": {
+                "description": "states, next / last evaluation will be ignored, replaces the notifier with the same ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notifiers"
+                ],
+                "summary": "updates a notifier",
+                "parameters": [
+                    {
+                        "description": "Notifier",
+                        "name": "notifier",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Notifier"
+                        }
+                    }
+                ]
+            },
+            "post": {
+                "description": "states, next / last evaluation will be ignored",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notifiers"
+                ],
+                "summary": "creates a notifier",
+                "parameters": [
+                    {
+                        "description": "Notifier",
+                        "name": "notifier",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Notifier"
+                        }
+                    }
+                ]
+            },
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notifiers"
+                ],
+                "summary": "deletes a notifier with a specifc ID",
+                "parameters": [
+                    {
+                        "description": "Notifier",
+                        "name": "notifier",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Notifier"
+                        }
+                    }
+                ]
+            }
+        },
+        "/notifier/{userId}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notifiers"
+                ],
+                "summary": "lists the notifiers of a user",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User ID",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ]
+            }
+        }
+    },
+    "definitions": {
+        "model.Notifier": {
+            "type": "object",
+            "properties": {
+                "active": {
+                    "type": "boolean"
+                },
+                "alertText": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "evaluationInterval": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "lastEvaluation": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "nextEvaluation": {
+                    "type": "string"
+                },
+                "notifierStates": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.NotifierState"
+                    }
+                },
+                "notifierTemplates": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.NotifierTemplate"
+                    }
+                },
+                "templateOperator": {
+                    "type": "string"
+                },
+                "timeUntilTrigger": {
+                    "description": "TimeUntilTrigger like the grafana pending state time",
+                    "type": "integer"
+                },
+                "userId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.NotifierState": {
+            "type": "object",
+            "properties": {
+                "state": {
+                    "type": "string"
+                },
+                "timestamp": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.NotifierTemplate": {
+            "type": "object",
+            "properties": {
+                "durationToCheck": {
+                    "type": "integer"
+                },
+                "key": {
+                    "type": "string"
+                },
+                "operator": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
         }
     }
 }`

@@ -29,7 +29,16 @@ func setupRouter() *gin.Engine {
 	url := ginSwagger.URL("http://localhost:8080/swagger/doc.json") // The url pointing to API definition
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 
+	// auctions counts
 	r.GET("/api/new-auctions", NewAuctions)
+
+	// flippers counts
+
+	// notifiers
+	r.GET("/api/notifier/:userId", ListByNotifiersUser)
+	r.POST("/api/notifier", CreateNotifier)
+	r.PUT("/api/notifier", UpdateNotifier)
+	r.DELETE("/api/notifier", DeleteNotifier)
 
 	return r
 }

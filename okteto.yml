@@ -19,5 +19,6 @@ environment:
 - REDIS_URL=redis://redis.redis:6379
 - TOPIC_NEW_AUCTION=sky-newauction
 - TOPIC_NEW_FLIP=sky-newflip
+- MONGO_URL=mongodb://root:root@mongo.mongo:27017
 forward:
 - 8080:8080
