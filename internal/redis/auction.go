@@ -20,15 +20,19 @@ func CountAuction(auction *model.Auction) error {
 
 		key := MinuteKey(auction.Start, true)
 		pipe.PFAdd(ctx, key, auction.UUID)
+		pipe.Expire(ctx, key, time.Minute*60*5)
 
 		key = HourKey(auction.Start, true)
 		pipe.PFAdd(ctx, key, auction.UUID)
+		pipe.Expire(ctx, key, time.Hour*24*5)
 
 		key = DayKey(auction.Start, true)
 		pipe.PFAdd(ctx, key, auction.UUID)
+		pipe.Expire(ctx, key, time.Hour*24*30*5)
 
 		key = MonthKey(auction.Start, true)
 		pipe.PFAdd(ctx, key, auction.UUID)
+		pipe.Expire(ctx, key, time.Hour*24*30*365*5)
 
 		return nil
 	})
