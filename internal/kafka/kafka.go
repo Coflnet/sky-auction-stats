@@ -57,11 +57,9 @@ func StartReaders() error {
 	}()
 
 	for {
-		log.Info().Msg("start reading auctions")
 		err := ReadAuctions()
 		if err != nil {
 			log.Panic().Err(err).Msgf("error consuming new auctions")
 		}
-		log.Info().Msg("reading auctions finished")
 	}
 }

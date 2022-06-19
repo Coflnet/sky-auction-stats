@@ -12,7 +12,6 @@ import (
 
 func ReadAuctions() error {
 
-	log.Info().Msg("start fetching messages")
 	messages := make([]kafka.Message, 0)
 	for i := 0; i < 1000; i++ {
 		m, err := auctionReader.FetchMessage(context.Background())
@@ -22,13 +21,11 @@ func ReadAuctions() error {
 		messages = append(messages, m)
 	}
 
-	log.Info().Msg("start processing messages")
 	processedMessages := processMessages(messages)
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*2)
 	defer cancel()
 
-	log.Info().Msg("start committing")
 	messagesToCommit := make([]kafka.Message, 0)
 	for processedMessage := range processedMessages {
 		messagesToCommit = append(messagesToCommit, processedMessage)
@@ -39,7 +36,7 @@ func ReadAuctions() error {
 		log.Error().Err(err).Msgf("error committing message")
 		return err
 	}
-	log.Info().Msgf("finished committing, %d messages", len(messagesToCommit))
+	log.Info().Msgf("processed %d messages", len(messagesToCommit))
 
 	return nil
 }
@@ -84,7 +81,6 @@ func processMessages(messages []kafka.Message) <-chan kafka.Message {
 		}
 		wg.Wait()
 
-		log.Info().Msg("finished processing")
 		close(ch)
 	}()
 
