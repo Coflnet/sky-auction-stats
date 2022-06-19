@@ -35,13 +35,9 @@ func main() {
 		}
 	}()
 
-	err = prometheus.InitPrometheus()
-	if err != nil {
-		log.Panic().Err(err).Msg("failed to init prometheus")
-		return
-	}
-
+	prometheus.StartPrometheus()
 	usecase.StartNotifierSchedule()
+
 	err = api.StartApi()
 	log.Panic().Err(err).Msgf("api stopped")
 }
