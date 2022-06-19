@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/Coflnet/auction-stats/internal/model"
 	"github.com/Coflnet/auction-stats/internal/mongo"
+	"github.com/Coflnet/auction-stats/internal/prometheus"
 	"github.com/Coflnet/auction-stats/internal/redis"
 	"github.com/rs/zerolog/log"
 	"sort"
@@ -77,6 +78,8 @@ func CheckNotifiers() error {
 			if err != nil {
 				log.Error().Err(err).Msgf("error checking notifier, %v", n)
 			}
+
+			prometheus.NotifiersEvaluated()
 		}(notifier)
 	}
 

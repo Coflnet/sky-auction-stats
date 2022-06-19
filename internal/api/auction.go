@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/Coflnet/auction-stats/internal/prometheus"
 	"github.com/Coflnet/auction-stats/internal/usecase"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
@@ -52,6 +53,7 @@ func NewAuctions(c *gin.Context) {
 		return
 	}
 
+	prometheus.RequestsProcessed()
 	log.Info().Msgf("searched new auctions found: %d", data)
 	c.JSON(http.StatusOK, data)
 }

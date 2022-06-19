@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/Coflnet/auction-stats/internal/model"
+	"github.com/Coflnet/auction-stats/internal/prometheus"
 	"github.com/go-redis/redis/v9"
 	"github.com/rs/zerolog/log"
 	"strconv"
@@ -35,6 +36,8 @@ func CountAuction(auction *model.Auction) error {
 	if err != nil {
 		return err
 	}
+
+	prometheus.AuctionAdded()
 
 	return nil
 }
