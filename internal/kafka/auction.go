@@ -12,6 +12,7 @@ import (
 
 func ReadAuctions() error {
 
+	log.Info().Msg("start fetching messages")
 	messages := make([]kafka.Message, 0)
 	for i := 0; i < 1000; i++ {
 		m, err := auctionReader.FetchMessage(context.Background())
@@ -21,6 +22,7 @@ func ReadAuctions() error {
 		messages = append(messages, m)
 	}
 
+	log.Info().Msg("start processing messages")
 	processedMessages := processMessages(messages)
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*2)
@@ -42,11 +44,10 @@ func ReadAuctions() error {
 	return nil
 }
 
-// processMessage takes a new-auction message from kafka and processes everything that has to be done
+// processMessages takes new-auction messages from kafka and processes everything that has to be done
 // example key of a message: 7807253170724460696506/09/2022 12:23:12
 func processMessages(messages []kafka.Message) <-chan kafka.Message {
 
-	log.Info().Msgf("starting to process %d messages", len(messages))
 	ch := make(chan kafka.Message, len(messages))
 
 	go func() {
@@ -82,6 +83,8 @@ func processMessages(messages []kafka.Message) <-chan kafka.Message {
 			}(m)
 		}
 		wg.Wait()
+
+		log.Info().Msg("finished processing")
 		close(ch)
 	}()
 
