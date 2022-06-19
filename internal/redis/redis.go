@@ -8,6 +8,8 @@ import (
 
 var rdb *redis.Client
 
+const auctionStatePrefixKey = "auction_stats_"
+
 func Init() error {
 	host := os.Getenv("REDIS_URL")
 

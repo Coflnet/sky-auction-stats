@@ -63,7 +63,7 @@ func StartReaders() error {
 			log.Panic().Err(err).Msgf("error consuming new auctions")
 		}
 
-		if runs >= 20000 {
+		if runs >= 1000 {
 			log.Info().Msgf("inserted %d messages", runs)
 			runs = 0
 		}

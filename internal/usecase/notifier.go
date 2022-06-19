@@ -51,8 +51,7 @@ func DeleteNotifier(notifier *model.Notifier) error {
 
 func StartNotifierSchedule() {
 	go func() {
-		for tick := range time.Tick(time.Second * 10) {
-			log.Info().Msgf("notifier tick at %v", tick)
+		for range time.Tick(time.Second * 10) {
 			err := CheckNotifiers()
 			if err != nil {
 				log.Error().Err(err).Msg("error checking notifiers")

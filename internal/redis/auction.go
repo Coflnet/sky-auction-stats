@@ -17,16 +17,16 @@ func CountAuction(auction *model.Auction) error {
 	defer cancel()
 	_, err := rdb.Pipelined(ctx, func(pipe redis.Pipeliner) error {
 
-		key := MinuteKey(auction.Start)
+		key := MinuteKey(auction.Start, true)
 		pipe.PFAdd(ctx, key, auction.UUID)
 
-		key = HourKey(auction.Start)
+		key = HourKey(auction.Start, true)
 		pipe.PFAdd(ctx, key, auction.UUID)
 
-		key = DayKey(auction.Start)
+		key = DayKey(auction.Start, true)
 		pipe.PFAdd(ctx, key, auction.UUID)
 
-		key = MonthKey(auction.Start)
+		key = MonthKey(auction.Start, true)
 		pipe.PFAdd(ctx, key, auction.UUID)
 
 		return nil
@@ -87,7 +87,7 @@ func everyMinBetween(start, end time.Time, keys []string) []string {
 	}
 
 	// add start key to array
-	key := MinuteKey(start)
+	key := MinuteKey(start, true)
 
 	// count start 1 m up
 	newStart := start.Add(time.Minute * 1)
@@ -101,7 +101,7 @@ func everyHourBetween(start, end time.Time, keys []string) []string {
 		return keys
 	}
 
-	key := HourKey(start)
+	key := HourKey(start, true)
 	newStart := start.Add(time.Hour * 1)
 
 	keys = append(keys, key)
@@ -113,32 +113,44 @@ func everyDayBetween(start, end time.Time, keys []string) []string {
 		return keys
 	}
 
-	key := DayKey(start)
+	key := DayKey(start, true)
 	newStart := start.Add(time.Hour * 24)
 
 	keys = append(keys, key)
 	return everyDayBetween(newStart, end, keys)
 }
 
-func MinuteKey(t time.Time) string {
+func MinuteKey(t time.Time, withPrefix bool) string {
 	m := strconv.Itoa(t.Minute())
-	return HourKey(t) + m
+	if !withPrefix {
+		return HourKey(t, false) + m
+	}
+	return auctionStatePrefixKey + HourKey(t, false) + m
 }
 
-func HourKey(t time.Time) string {
+func HourKey(t time.Time, withPrefix bool) string {
 	h := strconv.Itoa(t.Hour())
-	return DayKey(t) + h
+	if !withPrefix {
+		return DayKey(t, false) + h
+	}
+	return auctionStatePrefixKey + DayKey(t, false) + h
 }
 
-func DayKey(t time.Time) string {
+func DayKey(t time.Time, withPrefix bool) string {
 	d := strconv.Itoa(t.Day())
-	return MonthKey(t) + d
+	if !withPrefix {
+		return MonthKey(t, false) + d
+	}
+	return auctionStatePrefixKey + MonthKey(t, false) + d
 }
 
-func MonthKey(t time.Time) string {
+func MonthKey(t time.Time, withPrefix bool) string {
 	y := strconv.Itoa(t.Year())
 	m := int(t.Month())
-	return y + strconv.Itoa(m)
+	if !withPrefix {
+		return y + strconv.Itoa(m)
+	}
+	return auctionStatePrefixKey + y + strconv.Itoa(m)
 }
 
 func countKeys(keys []string) (int64, error) {
