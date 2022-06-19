@@ -28,18 +28,18 @@ func ReadAuctions() error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*2)
 	defer cancel()
 
-	count := 0
-
 	log.Info().Msg("start committing")
+	messagesToCommit := make([]kafka.Message, 0)
 	for processedMessage := range processedMessages {
-		err := auctionReader.CommitMessages(ctx, processedMessage)
-		if err != nil {
-			log.Error().Err(err).Msgf("error committing message")
-			return err
-		}
-		count++
+		messagesToCommit = append(messagesToCommit, processedMessage)
 	}
-	log.Info().Msgf("finished committing, %d messages", count)
+
+	err := auctionReader.CommitMessages(ctx, messagesToCommit...)
+	if err != nil {
+		log.Error().Err(err).Msgf("error committing message")
+		return err
+	}
+	log.Info().Msgf("finished committing, %d messages", len(messagesToCommit))
 
 	return nil
 }
