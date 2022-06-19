@@ -3,7 +3,6 @@ package kafka
 import (
 	"context"
 	"github.com/Coflnet/auction-stats/internal/model"
-	"github.com/Coflnet/auction-stats/internal/prometheus"
 	"github.com/Coflnet/auction-stats/internal/redis"
 	"github.com/rs/zerolog/log"
 	"github.com/segmentio/kafka-go"
@@ -52,8 +51,6 @@ func processMessage(msg *kafka.Message) error {
 		log.Error().Err(err).Msgf("error counting auction")
 		return err
 	}
-
-	prometheus.ObserveAuctionAt()
 
 	return nil
 }
