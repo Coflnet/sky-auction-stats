@@ -29,17 +29,17 @@ func ReadAuctions() error {
 	defer cancel()
 
 	count := 0
+
+	log.Info().Msg("start committing")
 	for processedMessage := range processedMessages {
 		err := auctionReader.CommitMessages(ctx, processedMessage)
 		if err != nil {
 			log.Error().Err(err).Msgf("error committing message")
 			return err
 		}
-
 		count++
 	}
-
-	log.Info().Msgf("processed batch of %d messages", count)
+	log.Info().Msgf("finished committing, %d messages", count)
 
 	return nil
 }
