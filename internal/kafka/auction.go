@@ -47,39 +47,42 @@ func ReadAuctions() error {
 func processMessages(messages []kafka.Message) <-chan kafka.Message {
 
 	ch := make(chan kafka.Message)
-	wg := sync.WaitGroup{}
-	for _, m := range messages {
-		wg.Add(1)
 
-		go func(msg kafka.Message) {
-			defer wg.Done()
+	go func() {
+		wg := sync.WaitGroup{}
+		for _, m := range messages {
+			wg.Add(1)
 
-			uuid := string(msg.Key)[:20]
-			t := string(msg.Key)[len(string(msg.Key))-len("06/14/2022 04:55:56"):]
+			go func(msg kafka.Message) {
+				defer wg.Done()
 
-			timestamp, err := time.Parse("01/02/2006 15:04:05", t)
-			if err != nil {
-				log.Error().Err(err).Msgf("can not convert timestamp: %s", t)
-				return
-			}
+				uuid := string(msg.Key)[:20]
+				t := string(msg.Key)[len(string(msg.Key))-len("06/14/2022 04:55:56"):]
 
-			auction := model.Auction{
-				Start: timestamp,
-				UUID:  uuid,
-			}
+				timestamp, err := time.Parse("01/02/2006 15:04:05", t)
+				if err != nil {
+					log.Error().Err(err).Msgf("can not convert timestamp: %s", t)
+					return
+				}
 
-			err = redis.CountAuction(&auction)
-			if err != nil {
-				log.Error().Err(err).Msgf("error counting auction")
+				auction := model.Auction{
+					Start: timestamp,
+					UUID:  uuid,
+				}
 
-				return
-			}
+				err = redis.CountAuction(&auction)
+				if err != nil {
+					log.Error().Err(err).Msgf("error counting auction")
 
-			ch <- msg
-		}(m)
-	}
+					return
+				}
 
-	wg.Wait()
-	close(ch)
+				ch <- msg
+			}(m)
+		}
+		wg.Wait()
+		close(ch)
+	}()
+
 	return ch
 }
