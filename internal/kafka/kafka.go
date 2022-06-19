@@ -56,17 +56,10 @@ func StartReaders() error {
 		log.Info().Msgf("closed kafka reader gracefully")
 	}()
 
-	runs := 0
 	for {
 		err := ReadAuctions()
 		if err != nil {
 			log.Panic().Err(err).Msgf("error consuming new auctions")
 		}
-
-		if runs >= 1000 {
-			log.Info().Msgf("inserted %d messages", runs)
-			runs = 0
-		}
-		runs++
 	}
 }

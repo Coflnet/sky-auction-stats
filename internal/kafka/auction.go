@@ -13,7 +13,7 @@ import (
 func ReadAuctions() error {
 
 	messages := make([]kafka.Message, 0)
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 1000; i++ {
 		m, err := auctionReader.FetchMessage(context.Background())
 		if err != nil {
 			return err
@@ -25,13 +25,19 @@ func ReadAuctions() error {
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*2)
 	defer cancel()
+
+	count := 0
 	for processedMessage := range processedMessages {
 		err := auctionReader.CommitMessages(ctx, processedMessage)
 		if err != nil {
 			log.Error().Err(err).Msgf("error committing message")
 			return err
 		}
+
+		count++
 	}
+
+	log.Info().Msgf("processed batch of %d messages", count)
 
 	return nil
 }
