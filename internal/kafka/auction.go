@@ -46,7 +46,8 @@ func ReadAuctions() error {
 // example key of a message: 7807253170724460696506/09/2022 12:23:12
 func processMessages(messages []kafka.Message) <-chan kafka.Message {
 
-	ch := make(chan kafka.Message)
+	log.Info().Msgf("starting to process %d messages", len(messages))
+	ch := make(chan kafka.Message, len(messages))
 
 	go func() {
 		wg := sync.WaitGroup{}
