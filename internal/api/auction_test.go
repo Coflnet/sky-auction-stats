@@ -14,10 +14,7 @@ import (
 
 func TestNewAuctionsValid(t *testing.T) {
 	router := setupRouter()
-	err := prometheus.InitPrometheus()
-	if err != nil {
-		t.Error(err)
-	}
+	prometheus.StartPrometheus()
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("/new-auctions?duration=%s", url.QueryEscape("5")), nil)
@@ -28,10 +25,7 @@ func TestNewAuctionsValid(t *testing.T) {
 
 func TestNewAuctionsTooSmall(t *testing.T) {
 	router := setupRouter()
-	err := prometheus.InitPrometheus()
-	if err != nil {
-		t.Error(err)
-	}
+	prometheus.StartPrometheus()
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("/new-auctions?duration=%s", url.QueryEscape("-44")), nil)
@@ -42,10 +36,7 @@ func TestNewAuctionsTooSmall(t *testing.T) {
 
 func TestNewAuctionsTooBig(t *testing.T) {
 	router := setupRouter()
-	err := prometheus.InitPrometheus()
-	if err != nil {
-		t.Error(err)
-	}
+	prometheus.StartPrometheus()
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("/new-auctions?duration=%s", url.QueryEscape("12345")), nil)
@@ -56,10 +47,7 @@ func TestNewAuctionsTooBig(t *testing.T) {
 
 func TestNewAuctionsNoArgument(t *testing.T) {
 	router := setupRouter()
-	err := prometheus.InitPrometheus()
-	if err != nil {
-		t.Error(err)
-	}
+	prometheus.StartPrometheus()
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("/new-auctions"), nil)
@@ -70,10 +58,7 @@ func TestNewAuctionsNoArgument(t *testing.T) {
 
 func TestNewAuctionsInvalid(t *testing.T) {
 	router := setupRouter()
-	err := prometheus.InitPrometheus()
-	if err != nil {
-		t.Error(err)
-	}
+	prometheus.StartPrometheus()
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("/new-auctions?duration=%s", "hello-world"), nil)
@@ -84,10 +69,7 @@ func TestNewAuctionsInvalid(t *testing.T) {
 
 func TestNewAuctionsOneDuration(t *testing.T) {
 	router := setupRouter()
-	err := prometheus.InitPrometheus()
-	if err != nil {
-		t.Error(err)
-	}
+	prometheus.StartPrometheus()
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("/new-auctions?duration=%s", "1"), nil)
@@ -104,11 +86,7 @@ func FuzzNewAuctions(f *testing.F) {
 	}
 
 	router := setupRouter()
-	err := prometheus.InitPrometheus()
-	if err != nil {
-		f.Error(err)
-		return
-	}
+	prometheus.StartPrometheus()
 
 	f.Fuzz(func(t *testing.T, duration string) {
 
