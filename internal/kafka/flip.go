@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/Coflnet/auction-stats/internal/model"
 	"github.com/Coflnet/auction-stats/internal/redis"
+	"github.com/rs/zerolog/log"
 	"github.com/segmentio/kafka-go"
 	"time"
 )
@@ -43,6 +44,8 @@ func ReadFlipSummaries() error {
 	err = writeFlipsToDiscordChat(flips)
 
 	err = flipSummaryReader.CommitMessages(ctx, msgs...)
+
+	log.Info().Msgf("processed %d messages", len(msgs))
 
 	return err
 }
