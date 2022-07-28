@@ -6,7 +6,6 @@ import (
 	"github.com/Coflnet/auction-stats/internal/model"
 	"github.com/Coflnet/auction-stats/internal/prometheus"
 	"github.com/go-redis/redis/v9"
-	"strconv"
 	"time"
 )
 
@@ -46,11 +45,8 @@ func UpdateFlipBuyerCount(flip *model.Flip) error {
 
 	sum := 0
 	for _, cmd := range cmds {
-		v, err := strconv.Atoi(cmd.(*redis.StringCmd).Val())
-		if err != nil {
-			return err
-		}
-		sum += v
+		v := cmd.(*redis.IntCmd).Val()
+		sum += int(v)
 	}
 
 	flip.AmountOfFlipsFromBuyerOfTheDay = sum
