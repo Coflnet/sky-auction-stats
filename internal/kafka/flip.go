@@ -11,12 +11,7 @@ import (
 
 func ReadFlipSummaries() error {
 
-	// if offset is big use a bigger batch size
-	offset := flipSummaryReader.Offset()
-	batchSize := 5
-	if offset >= 100000 {
-		batchSize = 1000
-	}
+	batchSize := 1000
 
 	ctx := context.Background()
 
