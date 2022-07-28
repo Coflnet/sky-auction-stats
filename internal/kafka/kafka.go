@@ -76,7 +76,7 @@ func StartReaders() {
 		for {
 			err := ReadAuctions()
 			if err != nil {
-				log.Panic().Err(err).Msgf("error consuming new auctions")
+				log.Error().Err(err).Msgf("error consuming new auctions")
 			}
 		}
 	}()
@@ -84,7 +84,7 @@ func StartReaders() {
 	for {
 		err := ReadFlipSummaries()
 		if err != nil {
-			log.Panic().Err(err).Msgf("error consuming new flipsummaries")
+			log.Error().Err(err).Msgf("error consuming new flipsummaries")
 		}
 	}
 }

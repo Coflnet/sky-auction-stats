@@ -37,7 +37,7 @@ func UpdateFlipBuyerCount(flip *model.Flip) error {
 	defer cancel()
 
 	cmds, err := rdb.Pipelined(ctx, func(pipe redis.Pipeliner) error {
-		pipe.Get(ctx, FlipSummaryPlayerHourKey(flip))
+		pipe.PFCount(ctx, FlipSummaryPlayerHourKey(flip))
 		return nil
 	})
 	if err != nil {
