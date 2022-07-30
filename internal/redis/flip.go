@@ -15,7 +15,7 @@ func CountFlipSummary(flip *model.Flip) error {
 	defer cancel()
 
 	_, err := rdb.Pipelined(ctx, func(pipe redis.Pipeliner) error {
-		key := FlipSummaryPlayerHourKey(flip)
+		key := FlipSummaryPlayerHourKey(flip, 0)
 		pipe.PFAdd(ctx, key, flip.Sell.UUID)
 		pipe.Expire(ctx, key, time.Hour*24*5)
 
@@ -36,7 +36,9 @@ func UpdateFlipBuyerCount(flip *model.Flip) error {
 	defer cancel()
 
 	cmds, err := rdb.Pipelined(ctx, func(pipe redis.Pipeliner) error {
-		pipe.PFCount(ctx, FlipSummaryPlayerHourKey(flip))
+		for i := 0; i < 24; i++ {
+			pipe.PFCount(ctx, FlipSummaryPlayerHourKey(flip, i))
+		}
 		return nil
 	})
 	if err != nil {
@@ -53,6 +55,6 @@ func UpdateFlipBuyerCount(flip *model.Flip) error {
 	return nil
 }
 
-func FlipSummaryPlayerHourKey(flip *model.Flip) string {
-	return fmt.Sprintf("%s_%s", flip.Buy.ProfileID, HourKey(flip.Sell.End, true))
+func FlipSummaryPlayerHourKey(flip *model.Flip, i int) string {
+	return fmt.Sprintf("%s_%s", flip.Buy.ProfileID, HourKey(flip.Sell.End.Add(-(time.Hour*time.Duration(i))), true))
 }
