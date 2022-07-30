@@ -80,7 +80,7 @@ func StartReaders() {
 				log.Error().Err(err).Msgf("error consuming new auctions")
 			}
 
-			time.Sleep(time.Millisecond * 50)
+			time.Sleep(time.Millisecond * 200)
 		}
 	}()
 
@@ -90,7 +90,7 @@ func StartReaders() {
 			log.Error().Err(err).Msgf("error consuming new flipsummaries")
 		}
 
-		time.Sleep(time.Millisecond * 50)
+		time.Sleep(time.Millisecond * 200)
 	}
 }
 

@@ -12,12 +12,7 @@ import (
 
 func ReadAuctions() error {
 
-	offset := auctionReader.Offset()
-
-	batchSize := 5
-	if offset >= 100000 {
-		batchSize = 1000
-	}
+	batchSize := 100
 
 	messages := make([]kafka.Message, 0)
 	for i := 0; i < batchSize; i++ {
