@@ -5,6 +5,7 @@ import (
 	"github.com/rs/zerolog/log"
 	kafkago "github.com/segmentio/kafka-go"
 	"os"
+	"time"
 )
 
 var (
@@ -78,6 +79,8 @@ func StartReaders() {
 			if err != nil {
 				log.Error().Err(err).Msgf("error consuming new auctions")
 			}
+
+			time.Sleep(time.Millisecond * 50)
 		}
 	}()
 
@@ -86,6 +89,8 @@ func StartReaders() {
 		if err != nil {
 			log.Error().Err(err).Msgf("error consuming new flipsummaries")
 		}
+
+		time.Sleep(time.Millisecond * 50)
 	}
 }
 
