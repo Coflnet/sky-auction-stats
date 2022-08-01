@@ -6,6 +6,7 @@ import (
 	"github.com/Coflnet/auction-stats/internal/model"
 	"github.com/Coflnet/auction-stats/internal/prometheus"
 	"github.com/go-redis/redis/v9"
+	"github.com/rs/zerolog/log"
 	"time"
 )
 
@@ -32,7 +33,7 @@ func CountFlipSummary(flip *model.Flip) error {
 }
 
 func UpdateFlipBuyerCount(flip *model.Flip) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	cmds, err := rdb.Pipelined(ctx, func(pipe redis.Pipeliner) error {
@@ -42,7 +43,8 @@ func UpdateFlipBuyerCount(flip *model.Flip) error {
 		return nil
 	})
 	if err != nil {
-		panic(err)
+		log.Error().Err(err).Msgf("error updating flip buyer count")
+		return err
 	}
 
 	sum := 0
