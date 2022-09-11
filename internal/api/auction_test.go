@@ -14,7 +14,7 @@ import (
 
 func TestNewAuctionsValid(t *testing.T) {
 	router := setupRouter()
-	err := prometheus.InitPrometheus()
+	err := prometheus.StartPrometheus()
 	if err != nil {
 		t.Error(err)
 	}
@@ -28,7 +28,7 @@ func TestNewAuctionsValid(t *testing.T) {
 
 func TestNewAuctionsTooSmall(t *testing.T) {
 	router := setupRouter()
-	err := prometheus.InitPrometheus()
+	err := prometheus.StartPrometheus()
 	if err != nil {
 		t.Error(err)
 	}
@@ -42,7 +42,7 @@ func TestNewAuctionsTooSmall(t *testing.T) {
 
 func TestNewAuctionsTooBig(t *testing.T) {
 	router := setupRouter()
-	err := prometheus.InitPrometheus()
+	err := prometheus.StartPrometheus()
 	if err != nil {
 		t.Error(err)
 	}
@@ -56,7 +56,7 @@ func TestNewAuctionsTooBig(t *testing.T) {
 
 func TestNewAuctionsNoArgument(t *testing.T) {
 	router := setupRouter()
-	err := prometheus.InitPrometheus()
+	err := prometheus.StartPrometheus()
 	if err != nil {
 		t.Error(err)
 	}
@@ -70,7 +70,7 @@ func TestNewAuctionsNoArgument(t *testing.T) {
 
 func TestNewAuctionsInvalid(t *testing.T) {
 	router := setupRouter()
-	err := prometheus.InitPrometheus()
+	err := prometheus.StartPrometheus()
 	if err != nil {
 		t.Error(err)
 	}
@@ -84,7 +84,7 @@ func TestNewAuctionsInvalid(t *testing.T) {
 
 func TestNewAuctionsOneDuration(t *testing.T) {
 	router := setupRouter()
-	err := prometheus.InitPrometheus()
+	err := prometheus.StartPrometheus()
 	if err != nil {
 		t.Error(err)
 	}
@@ -104,7 +104,7 @@ func FuzzNewAuctions(f *testing.F) {
 	}
 
 	router := setupRouter()
-	err := prometheus.InitPrometheus()
+	err := prometheus.StartPrometheus()
 	if err != nil {
 		f.Error(err)
 		return
